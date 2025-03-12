@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Rust Trie</title>
+      <link href="/2025/03/12/Rust-Trie/"/>
+      <url>/2025/03/12/Rust-Trie/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Impl-Trie-based-on-hasmap"><a href="#Impl-Trie-based-on-hasmap" class="headerlink" title="Impl Trie based on hasmap"></a>Impl Trie based on hasmap</h1><p>和其他语言没什么区别，很简单的写法，注意hashmap使用时的borrow即可。</p><pre class="language-rust" data-language="rust"><code class="language-rust">use std::collections::HashMap;#[derive(Debug)]struct Trie &#123;    node: HashMap&lt;u8, Trie&gt;,    end_point: bool,&#125;impl Trie &#123;    fn new() -&gt; Self &#123;        Self &#123; node: HashMap::new(), end_point: false &#125;    &#125;    fn insert(&amp;mut self, word: String) &#123;        if word.len() &#x3D;&#x3D; 0 &#123;            self.end_point &#x3D; true;            return;        &#125;        let word_vec &#x3D; word.into_bytes();        let first &#x3D; word_vec.first().unwrap();        if !self.node.contains_key(first) &#123;            self.node.insert(*first, Self::new());        &#125;        self.node.get_mut(first).unwrap().insert(String::from_utf8(word_vec[1..].to_owned()).unwrap())    &#125;    fn search_word(&amp;self, word: String) -&gt; bool &#123;        let mut curr &#x3D; self;        let word_vec &#x3D; word.as_bytes();        for letter in word_vec &#123;            if !curr.node.contains_key(letter) &#123;                return false;            &#125;            curr &#x3D; curr.node.get(letter).unwrap();        &#125;        curr.end_point    &#125;    fn search_prefix(&amp;self,prefix: String) -&gt; bool &#123;        let mut curr &#x3D; self;        let word_vec &#x3D; prefix.as_bytes();        for letter in word_vec &#123;            if !curr.node.contains_key(letter) &#123;                return false;            &#125;            curr &#x3D; curr.node.get(letter).unwrap();        &#125;        true    &#125;&#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Rust </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Uwsgi坑点之优雅退出</title>
       <link href="/2024/11/21/Uwsgi%E5%9D%91%E7%82%B9%E4%B9%8B%E4%BC%98%E9%9B%85%E9%80%80%E5%87%BA/"/>
       <url>/2024/11/21/Uwsgi%E5%9D%91%E7%82%B9%E4%B9%8B%E4%BC%98%E9%9B%85%E9%80%80%E5%87%BA/</url>
